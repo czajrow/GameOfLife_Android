@@ -1,7 +1,6 @@
 package com.example.gameoflife.logics;
 
 import android.graphics.Paint;
-import android.util.Log;
 
 import java.util.Random;
 
@@ -9,17 +8,24 @@ public class Matrix {
     private static final String TAG = "Matrix";
 
     private Cell[][] cells;
-    private double aliveFraction = 0.5;
     public final int DIMENSION;
 
     public Matrix(int dimension) {
-        Random r = new Random();
         this.DIMENSION = dimension;
         this.cells = new Cell[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
+                cells[i][j] = new Cell(State.DEAD);
+            }
+        }
+    }
+
+    public void randommize(double aliveFraction) {
+        Random r = new Random();
+        this.cells = new Cell[DIMENSION][DIMENSION];
+        for (int i = 0; i < DIMENSION; i++) {
+            for (int j = 0; j < DIMENSION; j++) {
                 cells[i][j] = new Cell(r.nextDouble() < aliveFraction ? State.ALIVE : State.DEAD);
-                Log.d(TAG, "Matrix: " + cells[i][j].getState().toString());
             }
         }
     }
@@ -48,5 +54,9 @@ public class Matrix {
 
     public Paint getPaint(int x, int y) {
         return cells[x][y].getPaint();
+    }
+
+    public void negState(int x, int y) {
+        cells[x][y].negState();
     }
 }

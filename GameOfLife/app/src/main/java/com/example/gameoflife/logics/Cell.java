@@ -20,15 +20,17 @@ public class Cell {
         this.state = state;
     }
 
+    public void negState() {
+        state = state == State.ALIVE ? State.DEAD : State.ALIVE;
+    }
+
     public Paint getPaint() {
         Paint paint = new Paint();
         switch (state) {
             case ALIVE:
-                Log.d(TAG, "getPaint: *****************************");
                 paint.setARGB(255, 255, 255, 255);
                 break;
             case DEAD:
-                Log.d(TAG, "getPaint: -----------------------------");
                 paint.setARGB(255, 0, 0, 0);
                 break;
         }
