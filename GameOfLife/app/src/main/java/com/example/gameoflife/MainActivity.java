@@ -29,14 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                // Do some drawing when surface is ready
-                Canvas canvas = holder.lockCanvas();
-                canvas.drawColor(Color.RED);
-                Paint paint = new Paint();
-                paint.setARGB(255, 0, 0, 0);
-                canvas.drawRect(0, 0, canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
-//                drawMatrix(canvas);
-                holder.unlockCanvasAndPost(canvas);
+                Canvas canvas = surface.getHolder().lockCanvas();
+                surface.getHolder().unlockCanvasAndPost(drawMatrix(canvas));
             }
 
             @Override
@@ -48,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button nextButton = findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 matrix.newGeneration();
@@ -57,9 +51,20 @@ public class MainActivity extends AppCompatActivity {
                 surface.getHolder().unlockCanvasAndPost(drawMatrix(canvas));
             }
         });
+
+        Button newButton = findViewById(R.id.newButton);
+        newButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                matrix = new Matrix(10);
+                Canvas canvas = surface.getHolder().lockCanvas();
+                surface.getHolder().unlockCanvasAndPost(drawMatrix(canvas));
+            }
+        });
     }
 
     private Canvas drawMatrix(Canvas canvas) {
+        canvas.drawColor(Color.GRAY);
         int h = canvas.getHeight() / matrix.DIMENSION;
         int w = canvas.getWidth() / matrix.DIMENSION;
         for (int x = 0; x < matrix.DIMENSION; x++) {
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 float right = left + w;
                 float bottom = top + h;
                 Paint paint = matrix.getPaint(x, y);
-                canvas.drawRect(left, top, right, bottom, paint);
+                canvas.drawRect(left, top, right - 1, bottom - 1, paint);
                 Log.d(TAG, "drawMatrix: " + "---" + left + " " + top + " " + right + " " + bottom);
             }
         }
