@@ -2,6 +2,7 @@ package com.example.gameoflife.logics;
 
 import android.graphics.Paint;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Matrix {
@@ -58,5 +59,38 @@ public class Matrix {
 
     public void negState(int x, int y) {
         cells[x][y].negState();
+    }
+
+    public char[] toArray() {
+        char[] arr = new char[DIMENSION * DIMENSION + 1];
+
+        arr[0] = (char) DIMENSION;
+
+        for (int i = 0; i < DIMENSION; i++) {
+            for (int j = 0; j < DIMENSION; j++) {
+                if (cells[i][j].getState() == State.ALIVE) {
+                    arr[i * DIMENSION + j + 1] = 1;
+                } else {
+                    arr[i * DIMENSION + j + 1] = 0;
+                }
+            }
+        }
+        return arr;
+    }
+
+    public static Matrix fromArray(char[] arr) {
+        Matrix matrix = new Matrix(arr[0]);
+        Cell[][] cells = matrix.cells;
+        int dimension = matrix.DIMENSION;
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                if (arr[i * dimension + j + 1] == 1) {
+                    cells[i][j].setState(State.ALIVE);
+                } else {
+                    cells[i][j].setState(State.DEAD);
+                }
+            }
+        }
+        return matrix;
     }
 }
